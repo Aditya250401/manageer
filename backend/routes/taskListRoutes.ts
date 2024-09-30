@@ -6,7 +6,6 @@ import { NotFoundError } from '../errors/not-found-error'
 import { TaskList } from '../models/user'
 import mongoose from 'mongoose'
 
-
 const router = express.Router()
 
 // Create a new TaskList
@@ -20,7 +19,7 @@ router.post(
 
 		const taskList = TaskList.build({
 			name,
-			userId: req.currentUser!.id
+			userId: req.currentUser!.id,
 		})
 
 		await taskList.save()
@@ -36,7 +35,7 @@ router.get(
 	async (req: Request, res: Response) => {
 		const taskLists = await TaskList.find({
 			userId: req.currentUser!.id,
-		}).populate('tasks')
+		})
 
 		res.send(taskLists)
 	}
@@ -59,7 +58,6 @@ router.get(
 		res.send(taskList)
 	}
 )
-
 
 // Delete a TaskList
 router.delete(

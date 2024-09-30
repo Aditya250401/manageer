@@ -9,10 +9,10 @@ import { currentUser } from '../middlewares/current-user'
 
 const router = express.Router()
 
-router.get('/api/users/currentuser', currentUser, (req, res) => {
-	res.send({ currentUser: req.currentUser || null })
+router.get('/api/users/currentuser', currentUser, async (req, res) => {
+	const user = await User.findOne({ email: req.currentUser?.email })
+	res.send({ currentUser: user ? user : null })
 })
-
 
 router.post(
 	'/api/users/signup',

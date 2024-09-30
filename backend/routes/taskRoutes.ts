@@ -28,8 +28,19 @@ router.post(
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
+
 		const { title, description, status, priority, dueDate, taskListId } =
 			req.body
+
+		console.log(
+			'this is the tasklist id',
+			taskListId,
+			title,
+			description,
+			status,
+			priority,
+			dueDate
+		)
 
 		// Verify that the TaskList exists and belongs to the current user
 		const taskList = await TaskList.findOne({
