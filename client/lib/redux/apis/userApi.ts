@@ -23,7 +23,7 @@ export type currentUserResponse = {
 const userApi = createApi({
 	reducerPath: 'userApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://localhost:3001',
+		baseUrl: 'https://manageer.vercel.app/',
 		credentials: 'include',
 		mode: 'cors',
 	}),

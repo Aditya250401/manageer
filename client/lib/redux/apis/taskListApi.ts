@@ -13,7 +13,7 @@ export type TaskListResponse = {
 const taskListApi = createApi({
 	reducerPath: 'taskListApi',
 	baseQuery: fetchBaseQuery({
-		baseUrl: 'http://localhost:3001',
+		baseUrl: 'https://manageer.vercel.app/',
 		credentials: 'include',
 		mode: 'cors',
 	}),
