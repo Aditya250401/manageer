@@ -17,7 +17,7 @@ app.set('trust proxy', true)
 app.use(json())
 app.use(
 	cors({
-		origin: 'https://manageer-zgig.vercel.app',
+		origin: '*',
 		credentials: true,
 	})
 )
