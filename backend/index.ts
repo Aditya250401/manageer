@@ -11,7 +11,7 @@ const start = async () => {
 	try {
 		//connect to mongoDb locally
 		await mongoose.connect(
-			process.env.MONGO_URI!,
+			'mongodb+srv://adi25:gevdoz-buskyd-xecKa5@cluster1.joivn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1'
 		)
 		console.log('Connected to MongoDb')
 	} catch (err) {
