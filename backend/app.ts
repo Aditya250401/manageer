@@ -15,7 +15,12 @@ import { NotFoundError } from './errors/not-found-error'
 const app = express()
 app.set('trust proxy', true)
 app.use(json())
-app.use(cors())
+app.use(
+	cors({
+		origin: 'https://manageer-zgig.vercel.app',
+		credentials: true,
+	})
+)
 app.use(
 	cookieSession({
 		signed: false,
