@@ -67,7 +67,7 @@ export default function SignInForm() {
 								<FormControl>
 									<Input
 										type="email"
-										className="account-form_input no-focus text-black"
+										className="account-form_input no-focus text-white"
 										{...field}
 									/>
 								</FormControl>
@@ -87,7 +87,7 @@ export default function SignInForm() {
 								<FormControl>
 									<Input
 										type="password"
-										className="account-form_input no-focus text-black"
+										className="account-form_input no-focus text-white"
 										{...field}
 									/>
 								</FormControl>

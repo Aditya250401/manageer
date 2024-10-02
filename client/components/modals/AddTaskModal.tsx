@@ -83,7 +83,7 @@ export default function AddTaskDialog() {
 	const currentListId = useAppSelector(getCurrentBoardId)
 
 	// Initialize the mutation hook at the top level
-	const [addTask, results] = useAddTaskMutation()
+	const [addTask] = useAddTaskMutation()
 
 	const form = useForm<TaskFormValues>({
 		resolver: zodResolver(taskFormSchema),
@@ -104,7 +104,6 @@ export default function AddTaskDialog() {
 			}).unwrap()
 			dispatch(closeAddTaskModal())
 
-			console.log('Task added successfully:', results)
 		} catch (error) {
 			console.error('Error adding task:', error)
 		}

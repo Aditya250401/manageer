@@ -11,16 +11,19 @@ import AddTaskModal from '@/components/modals/AddTaskModal'
 import EditTaskModal from '@/components/modals/EditTaskModal'
 
 import { Dashboard } from '@/components/main-board/BoardTasks'
+import { KanbanBoard } from '@/components/kanbanBoard/KanbanBoard'
 import { Separator } from '@/components/ui/separator'
 
 import { setCredentials } from '@/lib/redux/slices/authSlice'
-import { getCurrentBoardId } from '@/lib/redux/slices/appSlice'
+import { getCurrentBoardId, getKanban } from '@/lib/redux/slices/appSlice'
 
 
 export default function Home() {
 	const currentBoardId = useSelector(getCurrentBoardId)
 	const { data: userData } = useGetUserQuery()
 	const dispatch = useDispatch()
+
+	const kanbanState = useSelector(getKanban)
 
 	// Set user credentials if available
 	useEffect(() => {
@@ -41,7 +44,8 @@ export default function Home() {
 		{ skip: !currentBoardId }
 	)
 
-	console.log('tasks', tasks)
+	console.log(tasks)
+
 
 	if (!user) {
 		return (
@@ -70,7 +74,7 @@ export default function Home() {
 	if (tasksError) {
 		return (
 			<div>
-				<p className="text-center text-red-500">Error loading tasks!</p>{' '}
+				<p className="text-center text-red-500">Error loading tasks!</p>
 				<AddBoardModal />
 				<AddTaskModal />
 			</div>
@@ -80,9 +84,25 @@ export default function Home() {
 	if (!tasks || tasks.length === 0) {
 		return (
 			<div className="text-center">
-				<p>No tasks available for this board.</p> <AddBoardModal />
+				<p>No tasks available for this board.</p>
+				<AddBoardModal />
 				<AddTaskModal />
 			</div>
+		)
+	}
+
+	if (kanbanState) {
+		return (
+			<>
+				<AddBoardModal />
+				<AddTaskModal />
+				<EditTaskModal />
+				<div className="space-y-6">
+					<div>
+						<KanbanBoard taskarray={tasks} />
+					</div>
+				</div>
+			</>
 		)
 	}
 
@@ -94,7 +114,7 @@ export default function Home() {
 			<div className="space-y-6">
 				<div>
 					<Separator />
-					<Dashboard tasks={tasks} />
+					<Dashboard tasks={tasks} currentBoardId={currentBoardId} />
 				</div>
 			</div>
 		</>

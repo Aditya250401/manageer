@@ -37,7 +37,7 @@ export default function Sidebar() {
 					</p>
 
 					{/* Display the names of each board */}
-					{data.map((board: { [key: string]: any }, index: number) => {
+					{data.map((board: { [key: string]: string }, index: number) => {
 						const { name, id } = board
 						const isActive = index === active // Check if the board is active
 

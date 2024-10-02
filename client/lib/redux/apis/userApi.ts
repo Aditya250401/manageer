@@ -1,5 +1,6 @@
-import { currentUser } from './../../../../backend/middlewares/current-user';
+
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Task } from './tasksApi'
 
 export interface User {
 	name: string
@@ -12,7 +13,7 @@ export type UserResponse = {
 	id: string
 	email: string
 	username: string
-	taskLists: Array<any> // You can be more specific here if you know the structure of taskLists
+	taskLists: Task[] // u can be more specific here if you know the structure of taskLists
 }
 
 export type currentUserResponse = {

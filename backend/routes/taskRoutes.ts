@@ -82,13 +82,13 @@ router.get(
 	'/api/tasks/:id',
 	requireAuth,
 	async (req: Request, res: Response) => {
-		console.log('req.params.id', req.params.id)
+
 
 		const task = await Task.findOne({
 			_id: req.params.id,
 			userId: req.currentUser!.id,
 		})
-		console.log('task from the task route', task)
+
 
 		if (!task) {
 			throw new NotFoundError()

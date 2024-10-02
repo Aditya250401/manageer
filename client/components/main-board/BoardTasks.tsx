@@ -1,5 +1,5 @@
 'use client'
-import { useAppDispatch } from '@/lib/redux/store'
+import { useAppDispatch, useDeleteTaskMutation } from '@/lib/redux/store'
 import { setCurrentTaskId } from '@/lib/redux/slices/appSlice'
 import { openEditTaskModal } from '@/lib/redux/slices/appSlice'
 
@@ -47,10 +47,20 @@ interface Task {
 
 interface TaskProps {
 	tasks: Task[]
+	currentBoardId: string
 }
 
-export function Dashboard({ tasks }: TaskProps) {
+export function Dashboard({ tasks, currentBoardId }: TaskProps) {
 	const Dispatch = useAppDispatch()
+
+	const [deleteTask] = useDeleteTaskMutation()
+
+	const handleDeleteTask = (taskId: string) => {
+		deleteTask({
+			id: taskId,
+			taskListId: currentBoardId,
+		})
+	}
 
 	function DropDownBox() {
 		return (
@@ -205,10 +215,16 @@ export function Dashboard({ tasks }: TaskProps) {
 									onClick={() => {
 										Dispatch(setCurrentTaskId(task.id))
 										Dispatch(openEditTaskModal())
-										console.log('Edit Task:', task)
 									}}
 								>
 									Edit
+								</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => handleDeleteTask(task.id)}
+								>
+									Delete
 								</Button>
 							</TableCell>
 						</TableRow>

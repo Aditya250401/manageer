@@ -5,6 +5,8 @@ import {
 	setCurrentBoardName,
 	getCurrentBoardName,
 	openAddTaskModal,
+	toggleKanban,
+	getKanban,
 } from '@/lib/redux/slices/appSlice'
 import {
 	useAppDispatch,
@@ -19,6 +21,8 @@ export default function Navbar() {
 	const [response, setResponse] = useState({ message: '' })
 	const { data } = useGetTaskListsQuery()
 	const dispatch = useAppDispatch()
+
+	const kanban = useAppSelector(getKanban)
 	const [logout] = useLogoutMutation()
 
 	useEffect(() => {
@@ -79,6 +83,13 @@ export default function Navbar() {
 						className="px-4 py-2 flex rounded-xl items-center space-x-2"
 					>
 						<p>Logout</p>
+					</Button>
+					<Button
+						type="button"
+						onClick={() => dispatch(toggleKanban())}
+						className="px-4 py-2 flex rounded-xl items-center space-x-2"
+					>
+						<p>{kanban ? 'Kanban' : 'Table'}</p>
 					</Button>
 				</div>
 			</div>

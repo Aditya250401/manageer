@@ -86,13 +86,13 @@ export default function EditTaskDialog() {
 	const closeModal = () => dispatch(closeEditTaskModal())
 	const currentListId = useAppSelector(getCurrentBoardId)
 	const currentTaskId = useAppSelector(getCurrentTaskId)
-	console.log('currentTaskId', currentTaskId)
+
 
 	const { data } = useGetTaskByTaskIdQuery(currentTaskId)
-	console.log('data from edit task', data)
+
 
 	// Initialize the mutation hook at the top level
-	const [UpdateTask, results] = useUpdateTaskMutation()
+	const [UpdateTask] = useUpdateTaskMutation()
 
 	const form = useForm<TaskFormValues>({
 		resolver: zodResolver(taskFormSchema),
@@ -133,7 +133,7 @@ export default function EditTaskDialog() {
 			}).unwrap()
 			dispatch(closeEditTaskModal())
 
-			console.log('Task added successfully:', results)
+
 		} catch (error) {
 			console.error('Error adding task:', error)
 		}

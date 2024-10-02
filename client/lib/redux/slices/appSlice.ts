@@ -11,6 +11,7 @@ const initialState = {
 	currentBoardName: '',
 	currentBoardId: '',
 	currentTaskId: '',
+	isKanban: false,
 	taskList: [],
 	// Manage the state for opening and closing the Add and Edit Board modal
 	isAddBoardModal: { isOpen: false },
@@ -60,6 +61,10 @@ export const features = createSlice({
 		closeEditTaskModal: (state) => {
 			state.isEditTaskModal.isOpen = false
 		},
+		toggleKanban: (state) => {
+			state.isKanban = !state.isKanban
+		},
+
 		// Open the delete board and task modal with a specified variant (delete board or task
 	},
 })
@@ -74,6 +79,7 @@ export const {
 	closeAddTaskModal,
 	openEditTaskModal,
 	closeEditTaskModal,
+	toggleKanban,
 } = features.actions
 
 // delete task and board
@@ -99,9 +105,12 @@ export const getAddBoardModalValue = (state: RootState) =>
 export const getEditTaskModalValue = (state: RootState) =>
 	state.features.isEditTaskModal.isOpen
 
-// Selector functions to retrieve isOpen value of state from the isAddAndRditBoardModal state
+// Selector functions to retrieve isOpen value of state from the isAddBoardModal state
 export const AddBoardModal = (state: RootState) =>
 	state.features.isAddBoardModal.isOpen
+
+//get kanban state
+export const getKanban = (state: RootState) => state.features.isKanban
 
 // Selector functions to retrieve isOpen value of state from the isAddBoardModal state
 // Export the reducer for use in the Redux store

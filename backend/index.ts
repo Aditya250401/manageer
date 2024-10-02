@@ -10,7 +10,9 @@ const start = async () => {
 
 	try {
 		//connect to mongoDb locally
-		await mongoose.connect('mongodb://localhost:27017/manangeer')
+		await mongoose.connect(
+			process.env.MONGO_URI!,
+		)
 		console.log('Connected to MongoDb')
 	} catch (err) {
 		console.error(err)
