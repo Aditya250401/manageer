@@ -7,15 +7,15 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from '@/components/ui/dialog'
+
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store'
 import {
-	getAddAndEditTaskModalValue,
-	getAddAndEditTaskModalVariantValue,
-	closeAddAndEditTaskModal,
+	getAddTaskModalValue,
+	closeAddTaskModal,
 	getCurrentBoardId,
 } from '@/lib/redux/slices/appSlice'
+
 import { useAddTaskMutation } from '@/lib/redux/store'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -35,6 +35,7 @@ import {
 	CommandItem,
 	CommandList,
 } from '@/components/ui/command'
+
 import {
 	Form,
 	FormControl,
@@ -74,12 +75,11 @@ const taskFormSchema = z.object({
 
 type TaskFormValues = z.infer<typeof taskFormSchema>
 
-export default function AddOrEditTaskDialog() {
+export default function AddTaskDialog() {
 	const dispatch = useAppDispatch()
-	const isModalOpen = useAppSelector(getAddAndEditTaskModalValue)
-	const modalVariant = useAppSelector(getAddAndEditTaskModalVariantValue)
-	const isVariantAdd = modalVariant === 'Add New Task'
-	const closeModal = () => dispatch(closeAddAndEditTaskModal())
+	const isModalOpen = useAppSelector(getAddTaskModalValue)
+
+	const closeModal = () => dispatch(closeAddTaskModal())
 	const currentListId = useAppSelector(getCurrentBoardId)
 
 	// Initialize the mutation hook at the top level
@@ -97,27 +97,25 @@ export default function AddOrEditTaskDialog() {
 			alert('Please select a board to add a task to.')
 		}
 
-		addTask({
-			taskListId: currentListId,
-			taskData: data,
-		})
-			.unwrap()
-			.then(() => {
-				dispatch(closeAddAndEditTaskModal())
-			})
-			.catch((error) => {
-				console.log('Error adding task:', error)
-			})
+		try {
+			addTask({
+				taskListId: currentListId,
+				taskData: data,
+			}).unwrap()
+			dispatch(closeAddTaskModal())
+
+			console.log('Task added successfully:', results)
+		} catch (error) {
+			console.error('Error adding task:', error)
+		}
 	}
 
 	return (
 		<Dialog open={isModalOpen} onOpenChange={closeModal}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>{modalVariant}</DialogTitle>
-					<DialogDescription>
-						{isVariantAdd ? 'Create a new task.' : 'Edit the task.'}
-					</DialogDescription>
+					<DialogTitle>ADD TASK</DialogTitle>
+					<DialogDescription>Create a new task</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -276,7 +274,7 @@ export default function AddOrEditTaskDialog() {
 							render={({ field }) => (
 								<FormItem className="flex flex-col">
 									<FormLabel>Due Date</FormLabel>
-									<Popover>
+									<Popover modal={true}>
 										<PopoverTrigger asChild>
 											<Button
 												variant={'outline'}
@@ -296,10 +294,12 @@ export default function AddOrEditTaskDialog() {
 												onSelect={(date) => {
 													if (date) {
 														form.setValue('dueDate', date)
+														form.trigger('dueDate') // Trigger validation for the dueDate field
 													}
 												}}
+												initialFocus
 												disabled={(date) =>
-													date > new Date() || date < new Date('1900-01-01')
+													date < new Date(new Date().setHours(0, 0, 0, 0))
 												}
 											/>
 										</PopoverContent>

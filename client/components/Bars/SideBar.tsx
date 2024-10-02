@@ -1,12 +1,16 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 
 import {
 	setCurrentBoardName,
-	openAddAndEditBoardModal,
+	openAddBoardModal,
 	setCurrentBoardId,
 } from '@/lib/redux/slices/appSlice'
 import { useGetTaskListsQuery, useAppDispatch } from '@/lib/redux/store'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 
 export default function Sidebar() {
 	const { data } = useGetTaskListsQuery()
@@ -24,42 +28,44 @@ export default function Sidebar() {
 	}
 
 	return (
-		<aside className="w-[18.75rem] flex-none dark:bg-dark-grey h-full py-6 pr-6">
+		<aside className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
 			{data && (
 				<>
 					{/* Display the number of boards available in the data */}
-					<p className="text-medium-grey pl-[2.12rem] text-[.95rem] font-semibold uppercase pb-3">
+					<p className="text-muted-foreground pl-6 text-lg font-semibold uppercase">
 						{`All Boards (${data.length})`}
 					</p>
+
 					{/* Display the names of each board */}
 					{data.map((board: { [key: string]: any }, index: number) => {
 						const { name, id } = board
 						const isActive = index === active // Check if the board is active
+
 						return (
-							<div
+							<Link
+								href="#"
 								key={id}
 								onClick={() => handleNav(index, name, id)} // Handle navigation through boards on click
-								className={`${
+								className={cn(
+									buttonVariants({ variant: 'ghost' }),
 									isActive
-										? 'rounded-tr-full rounded-br-full bg-blue-500 text-white'
-										: 'text-black'
-								} cursor-pointer flex items-center 
-                  space-x-2 pl-[2.12rem] py-3 pb-3`}
+										? 'bg-muted text-primary'
+										: 'hover:bg-transparent hover:underline',
+									'justify-start pl-6'
+								)}
 							>
-								<p className="text-lg capitalize">{name}</p>
-							</div>
+								{name}
+							</Link>
 						)
 					})}
 				</>
 			)}
-			<button
-				onClick={() => dispatch(openAddAndEditBoardModal('Add New Board'))}
-				className="flex items-center space-x-2 pl-[2.12rem] py-3"
+			<Button
+				className="px-4 py-2 flex rounded-xl items-center space-x-2"
+				onClick={() => dispatch(openAddBoardModal('Add New Board'))}
 			>
-				<p className="text-base font-bold capitalize text-main-purple">
-					+ Create New Board
-				</p>
-			</button>
+				+ Create New Board
+			</Button>
 		</aside>
 	)
 }

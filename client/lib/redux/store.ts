@@ -29,7 +29,7 @@ export {
 	useGetUserQuery,
 	useAddUserMutation,
 	useLoginUserMutation,
-	useLogoutQuery,
+	useLogoutMutation,
 } from './apis/userApi'
 
 export {
@@ -37,6 +37,8 @@ export {
 	useGetTasksByListIdQuery,
 	useUpdateTaskStatusMutation,
 	useDeleteTaskMutation,
+	useUpdateTaskMutation,
+	useGetTaskByTaskIdQuery
 } from './apis/tasksApi'
 
 export {

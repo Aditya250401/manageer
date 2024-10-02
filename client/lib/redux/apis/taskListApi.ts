@@ -25,18 +25,24 @@ const taskListApi = createApi({
 					method: 'POST',
 					body: taskList,
 				}),
+				// Invalidate the task list query when a new task list is added
+				invalidatesTags: [{ type: 'TaskList', id: 'LIST' }],
 			}),
 			getTaskLists: builder.query<TaskListResponse[], void>({
 				query: () => ({
 					url: '/api/task-lists',
 					method: 'GET',
 				}),
+				// Provide a tag for the task lists
+				providesTags: [{ type: 'TaskList', id: 'LIST' }],
 			}),
 			deleteTaskList: builder.mutation<void, string>({
 				query: (id) => ({
 					url: `/api/task-lists/${id}`,
 					method: 'DELETE',
 				}),
+				// Invalidate the task list query when a task list is deleted
+				invalidatesTags: [{ type: 'TaskList', id: 'LIST' }],
 			}),
 		}
 	},
@@ -47,4 +53,5 @@ export const {
 	useGetTaskListsQuery,
 	useDeleteTaskListMutation,
 } = taskListApi
+
 export { taskListApi }

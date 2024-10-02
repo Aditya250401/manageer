@@ -1,11 +1,12 @@
-'use client'
-import * as React from 'react'
 import * as z from 'zod'
+import { useForm } from 'react-hook-form'
 
-import { useToast } from '@/components/ui/use-toast'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { UserLoginValidation } from '@/lib/models/user'
 
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+
 import {
 	Form,
 	FormControl,
@@ -14,20 +15,17 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form'
-
-import { Icons } from '@/components/icons'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
-import { useLoginUserMutation } from '@/store'
-import DispatchCredentials from '@/hooks/SetCredentials'
-import { useForm } from 'react-hook-form'
+import { useLoginUserMutation } from '@/lib/redux/store'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { UserLoginValidation } from '@/lib/models/user'
+import { setCredentials } from '@/lib/redux/slices/authSlice'
+import { useDispatch } from 'react-redux'
 
-export function UserAuthForm() {
-	const { toast } = useToast()
+export default function SignInForm() {
+	const dispatch = useDispatch()
+
 	const form = useForm<z.infer<typeof UserLoginValidation>>({
 		resolver: zodResolver(UserLoginValidation),
 		defaultValues: {
@@ -39,26 +37,15 @@ export function UserAuthForm() {
 	const [loginUser, results] = useLoginUserMutation()
 
 	const onSubmit = async (values: z.infer<typeof UserLoginValidation>) => {
-		try {
-			const res: any = await loginUser(values).unwrap()
-			toast({
-				title: res ? 'Login Successful' : 'Welcome',
-			})
-		} catch (error: any) {
-			toast({
-				variant: 'destructive',
-				title: error?.data?.msg,
-			})
-		}
+		await loginUser(values).unwrap()
 	}
 
 	if (results.isSuccess) {
-
-		toast({
-			title: 'Login Successful',
-		})
-		DispatchCredentials(results.data)
+		dispatch(setCredentials({ user: results.data }))
 		redirect('/')
+	}
+	if (results.isError) {
+		alert('Invalid email or password')
 	}
 
 	return (
@@ -110,9 +97,6 @@ export function UserAuthForm() {
 					/>
 
 					<Button disabled={results.isLoading} type="submit">
-						{results.isLoading && (
-							<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-						)}
 						Sign-In
 					</Button>
 				</form>
@@ -120,7 +104,7 @@ export function UserAuthForm() {
 			<p className="px-8 text-center text-sm text-muted-foreground">
 				Not registered?{' '}
 				<Link
-					href="/auth/sign-up"
+					href="/auth/signup"
 					className="underline underline-offset-4 hover:text-primary text-blue-500"
 				>
 					Register Now

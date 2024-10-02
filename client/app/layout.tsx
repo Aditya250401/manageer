@@ -15,9 +15,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<Providers>
-				<body className={`antialiased pb-24 h-screen overflow-hidden `}>
-					{children}
-				</body>
+				<body>{children}</body>
 			</Providers>
 		</html>
 	)
