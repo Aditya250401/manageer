@@ -22,7 +22,10 @@ app.use(
 		secure: false,
 	})
 )
-
+//default welcome message
+app.get('/', (req, res) => {
+	res.send('Welcome to Manageer API')
+})
 app.use(userRoutes)
 app.use(currentUser)
 app.use(taskListRouter)
