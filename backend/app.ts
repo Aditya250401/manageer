@@ -17,7 +17,7 @@ app.set('trust proxy', true)
 app.use(json())
 app.use(
 	cors({
-		origin: 'http://localhost:3000', // Replace with your frontend URL
+		origin:'https://manageer-zgig.vercel.app/', // Replace with your frontend URL
 		credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 	})
 )
