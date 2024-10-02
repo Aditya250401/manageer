@@ -58,14 +58,14 @@ export default function Sidebar() {
 							</Link>
 						)
 					})}
+					<Button
+						className="px-4 py-2 flex rounded-xl items-center space-x-2"
+						onClick={() => dispatch(openAddBoardModal())}
+					>
+						+ Create New Board
+					</Button>
 				</>
 			)}
-			<Button
-				className="px-4 py-2 flex rounded-xl items-center space-x-2"
-				onClick={() => dispatch(openAddBoardModal('Add New Board'))}
-			>
-				+ Create New Board
-			</Button>
 		</aside>
 	)
 }

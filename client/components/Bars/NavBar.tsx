@@ -1,6 +1,6 @@
 'use client'
+import { useState } from 'react'
 import { useEffect } from 'react'
-// Import Redux functions and selectors for managing board names
 import {
 	setCurrentBoardName,
 	getCurrentBoardName,
@@ -9,42 +9,51 @@ import {
 import {
 	useAppDispatch,
 	useAppSelector,
-	useLogoutMutation, // Updated to use mutation hook
+	useLogoutMutation,
 } from '@/lib/redux/store'
-// Import the data-fetching hook from the API slice
 import { useGetTaskListsQuery } from '@/lib/redux/store'
 import { Button } from '@/components/ui/button'
+import { redirect } from 'next/navigation'
 
 export default function Navbar() {
-	// Destructuring assignment to extract data from the useFetchDataFromDbQuery hook
+	const [response, setResponse] = useState({ message: '' })
 	const { data } = useGetTaskListsQuery()
-	// Access the Redux dispatch function for calling actions
 	const dispatch = useAppDispatch()
+	const [logout] = useLogoutMutation()
 
-	// Call the logout mutation hook at the top level
-	const [logout] = useLogoutMutation() // Updated to use mutation
-
-	// Effect hook to run when the data updates
 	useEffect(() => {
 		if (data?.length > 0) {
-			// When a user signs in, set the currentBoardName to the first board's name
 			const activeBoard = data[0]
 			dispatch(setCurrentBoardName(activeBoard.name))
 		}
 	}, [data])
 
-	// Select the current board name from the Redux store
 	const currentBoardName = useAppSelector(getCurrentBoardName)
 
-	// Function to handle logout
 	const handleLogout = async () => {
 		try {
-			await logout() // Call the logout function
-			// Optionally, you can dispatch any additional actions after logout
+			const response = await logout().unwrap() // Ensure you unwrap to catch errors
+			setResponse(response)
 		} catch (error) {
-			console.error('Logout failed:', error)
-			// Handle error (e.g., show a notification)
+			console.error('Logout failed:', error) // Log error for debugging
 		}
+	}
+
+	if (response.message === 'Successfully signed out') {
+		redirect('/auth/signin') // Redirect to the signin page after successful logout
+	}
+
+	if (data === undefined) {
+		return (
+			<nav className="bg-white border flex h-24">
+				<div className="flex-none w-[18.75rem] border-r-2 flex items-center pl-[2.12rem]">
+					<p className="font-bold text-3xl"> Manageer </p>
+				</div>
+				<div className="flex items-center space-x-3">
+					<p className="font-bold text-3xl"> Signin before using the app </p>
+				</div>
+			</nav>
+		)
 	}
 
 	return (
@@ -54,7 +63,6 @@ export default function Navbar() {
 			</div>
 
 			<div className="flex justify-between w-full items-center pr-[2.12rem]">
-				{/* populate the current board name in the navbar */}
 				<p className="text-black text-2xl font-bold pl-6">{currentBoardName}</p>
 
 				<div className="flex items-center space-x-3">
@@ -67,7 +75,7 @@ export default function Navbar() {
 					</Button>
 					<Button
 						type="button"
-						onClick={handleLogout} // Use the handleLogout function here
+						onClick={handleLogout}
 						className="px-4 py-2 flex rounded-xl items-center space-x-2"
 					>
 						<p>Logout</p>
