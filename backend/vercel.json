@@ -1,0 +1,19 @@
+{
+	"version": 2,
+	"builds": [
+		{
+			"src": "*.js",
+			"use": "@vercel/node"
+		}
+	],
+	"routes": [
+		{
+			"src": "/(.*)",
+			"dest": "/"
+		}
+	]
+}
+
+JWT_KEY="hsjfbvhjsbvhjbs"
+MONGO_URI='mongodb+srv://adi25:gevdoz-buskyd-xecKa5@cluster1.joivn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1'
+
