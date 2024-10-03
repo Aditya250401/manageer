@@ -25,7 +25,10 @@ const userApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: 'https://manageer.vercel.app/',
 		credentials: 'include',
-		mode: 'no-cors',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json',
+		},
 	}),
 
 	endpoints(builder) {
