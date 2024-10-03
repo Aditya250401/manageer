@@ -24,7 +24,8 @@ app.use(
 app.use(
 	cookieSession({
 		signed: false,
-		secure: false,
+		secure: true,
+		sameSite: 'none',
 	})
 )
 //default welcome message
